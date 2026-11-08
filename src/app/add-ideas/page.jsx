@@ -1,5 +1,6 @@
 'use client'
 import { Card } from '@heroui/react';
+import { redirect } from 'next/navigation';
 import React from 'react'
 
 export default function AddIdeas() {
@@ -19,6 +20,7 @@ export default function AddIdeas() {
     });
     const data = await res.json()
     console.log(data)
+    redirect('/all-ideas')
 
   
   }
@@ -223,7 +225,7 @@ export default function AddIdeas() {
           </div>
 
             </div>
-            <button className='btn'>add idea</button>
+            <button className='btn mt-5'>add idea</button>
           </form>
         </Card>
       </div>

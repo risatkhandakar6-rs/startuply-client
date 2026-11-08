@@ -10,8 +10,7 @@ async function IdeasList() {
     <div className="grid grid-cols-3 gap-5">
       {ideas.map((idea) => (
         <div key={idea._id} className="">
-          <h3 className="font-bold">{idea.title}</h3>
-          <p className="text-sm text-gray-500">{idea.shortDescription}</p>
+          
           <IdeaCard idea={idea} key={idea._id}></IdeaCard>
         </div>
       ))}

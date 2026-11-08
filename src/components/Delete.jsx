@@ -1,7 +1,50 @@
+'use client'
+import { AlertDialog, Button } from '@heroui/react'
+import { redirect } from 'next/navigation';
 import React from 'react'
+import { FaTrash } from 'react-icons/fa'
 
-export default function Delete() {
+export default function Delete({ idea }) {
+  const { _id } = idea;
+  const handleDelete = async() => {
+    const res = await fetch(`http://localhost:4000/ideas/${_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json'
+      }
+
+    });
+    const data = await res.json();
+    redirect('/all-ideas')
+   }
   return (
-    <div>Delete</div>
+     <AlertDialog>
+      <Button className="btn border-red-500 text-red-500" variant="danger"><FaTrash></FaTrash> Cancel</Button>
+      <AlertDialog.Backdrop>
+        <AlertDialog.Container className="!fixed !inset-0 !w-screen !h-dvh flex items-center justify-center p-3">
+          <AlertDialog.Dialog className="sm:max-w-[400px]">
+            <AlertDialog.CloseTrigger />
+            <AlertDialog.Header>
+              <AlertDialog.Icon status="danger" />
+              <AlertDialog.Heading>Delete idea permanently?</AlertDialog.Heading>
+            </AlertDialog.Header>
+            <AlertDialog.Body>
+              <p>
+                This will permanently delete <strong>My Awesome Project</strong> and all of its
+                data. This action cannot be undone.
+              </p>
+            </AlertDialog.Body>
+            <AlertDialog.Footer>
+              <Button slot="close" variant="tertiary">
+                Cancel
+              </Button>
+              <Button onClick={handleDelete}  slot="close" variant="danger">
+                Delete Idea
+              </Button>
+            </AlertDialog.Footer>
+          </AlertDialog.Dialog>
+        </AlertDialog.Container>
+      </AlertDialog.Backdrop>
+    </AlertDialog>
   )
 }

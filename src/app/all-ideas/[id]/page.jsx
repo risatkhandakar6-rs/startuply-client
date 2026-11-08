@@ -118,7 +118,7 @@ export default async function IdeaDetails({ params }) {
   <div className="flex flex-1 justify-end pt-10">
     <div className="flex items-center gap-3">
           <Edit idea={idea} />
-      <Delete></Delete>
+      <Delete idea={idea}></Delete>
     </div>
   </div>
 </div>
