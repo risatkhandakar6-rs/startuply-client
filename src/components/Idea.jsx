@@ -21,6 +21,7 @@ export default function IdeaCard({idea}) {
 
       {/* Image */}
       <div className="flex  items-center justify-center">
+        <Image src={imageURL} alt={title} width={200} height={200}></Image>
        
       </div>
 

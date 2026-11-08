@@ -1,3 +1,4 @@
+import Delete from "@/components/Delete";
 import Edit from "@/components/Edit";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,6 +21,7 @@ export default async function IdeaDetails({ params }) {
     );
   }
 
+  const idea = await res.json();
   const {
     title,
     shortDescription,
@@ -31,7 +33,7 @@ export default async function IdeaDetails({ params }) {
     targetAudience,
     problemStatement,
     proposedSolution,
-  } = await res.json();
+  } = idea;
 
   const tagList = tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
 
@@ -115,8 +117,8 @@ export default async function IdeaDetails({ params }) {
   {/* Right side: Edit */}
   <div className="flex flex-1 justify-end pt-10">
     <div className="flex items-center gap-3">
-      <Edit />
-      <span>hiiii</span>
+          <Edit idea={idea} />
+      <Delete></Delete>
     </div>
   </div>
 </div>
