@@ -4,6 +4,7 @@ import { authClient } from "@/lib/auth-client";
 import {Check} from "@gravity-ui/icons";
 import {Button, Card, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignUp() {
   const route = useRouter();
@@ -30,6 +31,11 @@ export default function SignUp() {
 
     
   };
+  const handleGoogleSignUp = async () => {
+    await authClient.signIn.social({
+    provider: "google",
+  });
+  }
 
   return (
     
@@ -110,7 +116,8 @@ export default function SignUp() {
           Reset
         </Button>
       </div>
-    </Form>
+      </Form>
+      <button onClick={handleGoogleSignUp} className="flex items-center w-full mt-5 btn btn-active"> <FcGoogle></FcGoogle> SignUp with Google</button>
    
      </div>
   );

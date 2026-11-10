@@ -1,9 +1,11 @@
 'use client'
 import { Card } from '@heroui/react';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import React from 'react'
+import { toast } from 'react-toastify';
 
 export default function AddIdeas() {
+  const router =useRouter()
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,8 +21,11 @@ export default function AddIdeas() {
 
     });
     const data = await res.json()
-    console.log(data)
-    redirect('/all-ideas')
+    if (res.ok) {
+      router.push("/all-ideas")
+      router.refresh()
+      toast.success('Sucessfully added a Idea')
+    }
 
   
   }
