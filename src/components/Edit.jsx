@@ -4,6 +4,7 @@ import {Envelope} from "@gravity-ui/icons";
 import { FaEdit } from "react-icons/fa";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 
 
 export default function Edit({ idea }) {
@@ -30,11 +31,14 @@ export default function Edit({ idea }) {
     const updatedIdea = Object.fromEntries(formData.entries());
     updatedIdea.budget = Number(updatedIdea.budget);
 
+    const {data:tokenData}=await authClient.token()
+
     const res = await fetch(`http://localhost:4000/ideas/${_id}`,
       {
         method: 'PATCH',
         headers: {
-          'Content-type':'application/json'
+          'Content-type': 'application/json',
+          authorization:`Bearer ${tokenData?.token}`
         },
         body:JSON.stringify(updatedIdea)
       }

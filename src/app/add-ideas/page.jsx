@@ -1,6 +1,7 @@
 'use client'
+import { authClient } from '@/lib/auth-client';
 import { Card } from '@heroui/react';
-import { redirect, useRouter } from 'next/navigation';
+import {  useRouter } from 'next/navigation';
 import React from 'react'
 import { toast } from 'react-toastify';
 
@@ -12,10 +13,13 @@ export default function AddIdeas() {
     const formData = new FormData(e.currentTarget)
     const ideas = Object.fromEntries(formData.entries())
 
+    const {data:tokenData}=await authClient.token()
+
     const res = await fetch('http://localhost:4000/idea', {
       method: 'POST',
       headers: {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        authrization:`Bearer ${tokenData?.token}`
       },
       body: JSON.stringify(ideas)
 

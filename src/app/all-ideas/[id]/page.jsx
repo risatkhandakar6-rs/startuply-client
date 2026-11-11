@@ -1,16 +1,27 @@
 import Delete from "@/components/Delete";
 import Edit from "@/components/Edit";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function IdeaDetails({ params }) {
   const { id } = await params;
+  const { token } = await auth.api.getToken({
+    headers:await headers()
+  })
 
   const res = await fetch(`http://localhost:4000/ideas/${id}`, {
-    cache: "no-store",
+    headers: {
+      authorization:`Bearer ${token}`
+    }
+    
   });
 
+
+
   if (!res.ok) {
+      
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="text-2xl font-bold text-gray-900">Idea not found</h1>
@@ -22,6 +33,7 @@ export default async function IdeaDetails({ params }) {
   }
 
   const idea = await res.json();
+  console.log(idea)
   const {
     title,
     shortDescription,

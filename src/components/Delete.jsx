@@ -1,16 +1,21 @@
 'use client'
+import { authClient } from '@/lib/auth-client';
 import { AlertDialog, Button } from '@heroui/react'
 import { redirect } from 'next/navigation';
 import React from 'react'
 import { FaTrash } from 'react-icons/fa'
 
-export default function Delete({ idea }) {
+export default  function Delete({ idea }) {
   const { _id } = idea;
-  const handleDelete = async() => {
+
+
+  const handleDelete = async () => {
+      const {data:tokenData}=await authClient.token()
     const res = await fetch(`http://localhost:4000/ideas/${_id}`, {
       method: 'DELETE',
       headers: {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        authorization:`Bearer ${tokenData?.token}`
       }
 
     });
