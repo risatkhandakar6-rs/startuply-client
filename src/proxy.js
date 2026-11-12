@@ -9,10 +9,15 @@ export async function proxy(request) {
   })
 
   if (!session) {
-    return NextResponse.redirect(new URL('/signin', request.url))
- }
+    const { pathname, search } = request.nextUrl
+    const url = new URL('/signin', request.url)
+    url.searchParams.set('callbackUrl', pathname + search)
+    return NextResponse.redirect(url)
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/add-ideas','/all-ideas','/all-ideas/:path'],
+  matcher: ['/add-ideas','/my-ideas', '/all-ideas/:path'],
 }

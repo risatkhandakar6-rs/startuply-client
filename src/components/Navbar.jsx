@@ -12,6 +12,7 @@ const Links = <>
   <Link href={'/'}>Home</Link>
   <Link href={'add-ideas'}>Add Ideas</Link>
   <Link href={'all-ideas'}>All Ideas</Link>
+  <Link href={'my-ideas'}>My Ideas</Link>
 
 </>
 const authentication = <>

@@ -4,12 +4,20 @@ import { authClient } from "@/lib/auth-client";
 import {Check} from "@gravity-ui/icons";
 import {Button, Card, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 
 
-export default function SignUp() {
+ function SignInForm() {
   const route = useRouter();
+  const searchParams = useSearchParams();
+    const rawCallback = searchParams.get("callbackUrl");
+  const callbackUrl =
+    rawCallback && rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+      ? rawCallback
+      : "/";
   const onSubmit =async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -22,7 +30,7 @@ export default function SignUp() {
     })
 
     if (data) {
-      route.push('/')
+      route.push(callbackUrl)
       route.refresh()
       
     }
@@ -33,6 +41,12 @@ export default function SignUp() {
 
     
   };
+   const handleGoogleSignIn = async () => {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL:callbackUrl
+    });
+    }
 
   return (
     
@@ -86,7 +100,9 @@ export default function SignUp() {
         <FieldError />
         </TextField>
         
-        <p>Don't have an accout? <Link href={'/signup'} className="text-blue-500">register</Link></p>
+        <p>Don't have an accout? <Link href={callbackUrl !== "/" ? `/signup?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/signup"}>
+  Sign up
+</Link></p>
 
       <div className="flex gap-2">
         <Button type="submit">
@@ -97,8 +113,16 @@ export default function SignUp() {
           Reset
         </Button>
       </div>
-    </Form>
+      </Form>
+       <button onClick={handleGoogleSignIn} className="flex items-center w-full mt-5 btn btn-active"> <FcGoogle></FcGoogle> SignIn with Google</button>
    
      </div>
+  );
+}
+export default function SignIn() {
+  return (
+    <Suspense fallback={null}>
+      <SignInForm />
+    </Suspense>
   );
 }

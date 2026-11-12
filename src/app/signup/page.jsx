@@ -3,11 +3,17 @@
 import { authClient } from "@/lib/auth-client";
 import {Check} from "@gravity-ui/icons";
 import {Button, Card, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 
 export default function SignUp() {
   const route = useRouter();
+  const searchParams = useSearchParams();
+    const rawCallback = searchParams.get("callbackUrl");
+  const callbackUrl =
+    rawCallback && rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+      ? rawCallback
+      : "/";
   const onSubmit =async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -25,15 +31,16 @@ export default function SignUp() {
       alert('error')
     }
     if (data) {
-      route.push('/');
+      route.push(callbackUrl);
       route.refresh()
     }
 
     
   };
   const handleGoogleSignUp = async () => {
-    await authClient.signIn.social({
-    provider: "google",
+    await authClient.signUp.social({
+      provider: "google",
+      callbackUrl:callbackUrl
   });
   }
 

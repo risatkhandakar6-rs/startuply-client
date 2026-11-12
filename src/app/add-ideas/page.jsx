@@ -6,7 +6,36 @@ import React from 'react'
 import { toast } from 'react-toastify';
 
 export default function AddIdeas() {
-  const router =useRouter()
+  const router = useRouter();
+    const { data: session } = authClient.useSession();
+  
+  const handleMyIdea = async (idea) => {
+    const user = session?.user;
+
+  const myIdeaData = {
+  userId: user?.id,
+  userName: user?.name,
+  userEmail: user?.email,
+  ideaId: idea?._id,
+  title: idea?.title,
+  shortDescription: idea?.shortDescription,
+  category: idea?.category,
+  imageURL: idea?.imageURL,
+  budget: idea?.budget,
+  
+};
+    console.log(myIdeaData);
+    const res = await fetch('http://localhost:4000/my-idea', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(myIdeaData)
+      
+
+    });
+    return res.ok;
+  }
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,13 +48,14 @@ export default function AddIdeas() {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        authrization:`Bearer ${tokenData?.token}`
+        authorization:`Bearer ${tokenData?.token}`
       },
       body: JSON.stringify(ideas)
 
     });
     const data = await res.json()
     if (res.ok) {
+       await handleMyIdea({ ...ideas, _id: data.insertedId }); 
       router.push("/all-ideas")
       router.refresh()
       toast.success('Sucessfully added a Idea')
@@ -33,6 +63,7 @@ export default function AddIdeas() {
 
   
   }
+
   return (
   
     <main className="min-h-screen bg-[#F8F9FC] px-4 py-12 sm:px-6">
@@ -234,7 +265,7 @@ export default function AddIdeas() {
           </div>
 
             </div>
-            <button className='btn mt-5'>add idea</button>
+            <button type='submit' className='btn mt-5'>add idea</button>
           </form>
         </Card>
       </div>

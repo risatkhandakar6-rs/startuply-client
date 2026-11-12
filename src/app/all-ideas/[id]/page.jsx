@@ -1,6 +1,8 @@
 import Delete from "@/components/Delete";
 import Edit from "@/components/Edit";
+import SearchFilter from "@/components/SearchFilter";
 import { auth } from "@/lib/auth";
+import { SearchField } from "@heroui/react";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,7 +52,8 @@ export default async function IdeaDetails({ params }) {
   const tagList = tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
 
   return (
-  <div className="flex w-full items-start justify-between gap-6 px-20">
+    <div className="flex w-full items-start justify-between gap-6 px-20">
+     
   {/* Left spacer  */}
   <div className="hidden flex-1 lg:block" />
 
